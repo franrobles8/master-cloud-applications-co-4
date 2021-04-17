@@ -1,0 +1,6 @@
+.git
+?
+.devcontainer
+Dockerfile
+okteto.yaml
+.stignore

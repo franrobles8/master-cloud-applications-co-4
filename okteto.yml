@@ -4,6 +4,3 @@ workdir: /okteto
 volumes:
   - /root/.m2
   - /root/.vscode-server
-forward:
-  - 8080:8080
-  - 35729:35729

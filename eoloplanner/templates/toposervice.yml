@@ -73,6 +73,7 @@ spec:
     ports:
     - port: 27017
       protocol: TCP
+{{- if .Values.ingress.enabled }}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -96,3 +97,17 @@ spec:
     ports:
     - protocol: TCP
       port: 8080
+{{- else }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-topo-from-nodeport
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Release.Name }}-toposervice
+  ingress:
+    - ports:
+      - port: 8080
+{{- end -}}

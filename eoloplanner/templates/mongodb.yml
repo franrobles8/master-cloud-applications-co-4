@@ -42,7 +42,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-mongo-pvc
 spec:
-  storageClassName: mongo
+  storageClassName: {{ .Release.Name }}-mongo
   accessModes:
   - ReadWriteOnce
   resources:

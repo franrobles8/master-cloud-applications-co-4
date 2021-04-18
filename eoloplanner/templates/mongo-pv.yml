@@ -1,12 +1,14 @@
+{{- if .Values.persistentVolumes.createOnInit -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ .Release.Name }}-mongo-pv
 spec:
-  storageClassName: {{ .Release.Name }}-mongo
+  storageClassName: {{ .Values.mongodb.storageClassName | default (printf "%s-mongo" .Release.Name) }}
   accessModes:
     - ReadWriteOnce
   capacity:
     storage: 1Gi
   hostPath:
     path: /db/{{ .Release.Name }}/mongo
+{{- end -}}

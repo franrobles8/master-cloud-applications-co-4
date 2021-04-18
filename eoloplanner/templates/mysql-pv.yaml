@@ -1,12 +1,14 @@
+{{- if .Values.persistentVolumes.createOnInit -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ .Release.Name }}-mysql-pv
 spec:
-  storageClassName: {{ .Release.Name }}-mysql
+  storageClassName: {{ .Values.mysql.storageClassName | default (printf "%s-mysql" .Release.Name) }}
   accessModes:
   - ReadWriteOnce
   capacity:
     storage: 1Gi
   hostPath:
     path: /db/{{ .Release.Name }}/mysql
+{{- end -}}

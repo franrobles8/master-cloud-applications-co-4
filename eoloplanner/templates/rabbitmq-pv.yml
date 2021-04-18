@@ -1,12 +1,14 @@
+{{- if .Values.persistentVolumes.createOnInit -}}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
   name: {{ .Release.Name }}-rabbit-pv
 spec:
-  storageClassName: {{ .Release.Name }}-rabbit
+  storageClassName: {{ .Values.rabbitmq.storageClassName | default (printf "%s-rabbit" .Release.Name) }}
   accessModes:
   - ReadWriteOnce
   capacity:
     storage: 1Gi
   hostPath:
     path: /db/{{ .Release.Name }}/rabbitmq
+{{- end -}}

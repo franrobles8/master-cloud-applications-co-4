@@ -42,7 +42,7 @@ spec:
   - port: 9090
     targetPort: 9090
     protocol: TCP
-    name: {{ .Release.Name }}-weatherservice-port
+    name: weatherservice-port
   selector:
     app: {{ .Release.Name }}-weatherservice
   type: ClusterIP

@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-toposervice
-        dns-policy: enabled
+        {{ .Release.Name }}-dns-policy: enabled
     spec:
       securityContext:
         runAsUser: 1001
@@ -49,7 +49,7 @@ spec:
   - port: 8080
     targetPort: 8080
     protocol: TCP
-    name: {{ .Release.Name }}-toposervice-port
+    name: toposervice-port
   selector:
     app: {{ .Release.Name }}-toposervice
   type: ClusterIP

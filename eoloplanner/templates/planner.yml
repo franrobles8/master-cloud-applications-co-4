@@ -14,7 +14,7 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}-planner
-        dns-policy: enabled
+        {{ .Release.Name }}-dns-policy: enabled
     spec:
       securityContext:
         runAsUser: 1001

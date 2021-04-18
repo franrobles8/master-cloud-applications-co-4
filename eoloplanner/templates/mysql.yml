@@ -38,7 +38,11 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-mysql-pvc
 spec:
+  {{- if .Values.persistentVolumes.createOnInit }} 
   storageClassName: {{ .Release.Name }}-mysql
+  {{- else }}
+  storageClassName: {{ .Values.mysql.storageClassName }}
+  {{- end }}
   accessModes:
   - ReadWriteOnce
   resources:

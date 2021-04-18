@@ -19,3 +19,15 @@ service:
   topotag: ""
   weatherimage: "oscarsotosanchez/weatherservice:v1.0"
   weathertag: ""
+
+persistentVolumes:
+  createOnInit: true
+
+mongodb:
+  storageClassName: ""
+
+mysql:
+  storageClassName: ""
+
+rabbitmq:
+  storageClassName: ""

@@ -42,12 +42,17 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-mongo-pvc
 spec:
-  storageClassName: {{ .Release.Name }}-mongo
+  {{- if .Values.persistentVolumes.createOnInit }} 
+  storageClassName: {{ .Release.Name }}-mongo 
+  {{- else }}
+  storageClassName: {{ .Values.mongodb.storageClassName }}
+  {{- end }}
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi          
+      storage: 1Gi
+
 ---
 apiVersion: v1
 kind: Service

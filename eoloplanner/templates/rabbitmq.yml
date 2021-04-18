@@ -39,7 +39,11 @@ kind: PersistentVolumeClaim
 metadata:
   name: {{ .Release.Name }}-rabbit-pvc
 spec:
+  {{- if .Values.persistentVolumes.createOnInit }} 
   storageClassName: {{ .Release.Name }}-rabbit
+  {{- else }}
+  storageClassName: {{ .Values.rabbitmq.storageClassName }}
+  {{- end }}
   accessModes:
   - ReadWriteOnce
   resources:

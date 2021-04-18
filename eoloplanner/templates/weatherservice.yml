@@ -8,19 +8,19 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-weatherservice
+      app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-weatherservice
+        app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
     spec:
       securityContext:
         runAsUser: 1001
       restartPolicy: Always
       containers:
       - name: {{ .Release.Name }}-weatherservice
-        image: oscarsotosanchez/weatherservice:v1.0
+        image: {{ .Values.service.weatherimage }}
         env:
         - name: GRPC_HOST
           valueFrom:
@@ -36,7 +36,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-weatherservice-service
   labels:
-    app: {{ .Release.Name }}-weatherservice
+    app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
 spec:
   ports:
   - port: 9090
@@ -44,7 +44,7 @@ spec:
     protocol: TCP
     name: weatherservice-port
   selector:
-    app: {{ .Release.Name }}-weatherservice
+    app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
   type: ClusterIP
 {{- if .Values.netpol.enabled }}
 ---
@@ -55,12 +55,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-weatherservice
+      app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-planner
+          app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
     ports:
     - port: 9090
       protocol: TCP

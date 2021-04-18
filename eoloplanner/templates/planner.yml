@@ -8,12 +8,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-planner
+      app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-planner
+        app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
         {{ .Release.Name }}-dns-policy: enabled
     spec:
       securityContext:
@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: {{ .Release.Name }}-planner
-        image: franrobles8/planner:v3.0
+        image: {{ .Values.service.plannerimage }}
         env:
         - name: TOPO_HOST
           value: {{ .Release.Name }}-toposervice-service
@@ -46,26 +46,26 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-planner
+      app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
   egress:
   - to:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-rabbitmq
+          app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
     ports:
     - port: 5672
       protocol: TCP
   - to:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-weatherservice
+          app: {{ .Values.service.weathertag | default (printf "%s-weatherservice" .Release.Name) }}
     ports:
     - port: 9090
       protocol: TCP
   - to:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-toposervice
+          app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
     ports:
     - port: 8080
       protocol: TCP

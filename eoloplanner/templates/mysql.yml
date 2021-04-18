@@ -8,16 +8,16 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-mysql
+      app: {{ .Values.service.mysqltag | default (printf "%s-mysql" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-mysql
+        app: {{ .Values.service.mysqltag | default (printf "%s-mysql" .Release.Name) }}
     spec:
       containers:
       - name: {{ .Release.Name }}-mysql
-        image: mysql:8.0.22
+        image: {{ .Values.service.mysqlimage }}
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: password
@@ -50,7 +50,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-mysql-service
   labels:
-    app: {{ .Release.Name }}-mysql
+    app: {{ .Values.service.mysqltag | default (printf "%s-mysql" .Release.Name) }}
 spec:
   ports:
   - port: 3306
@@ -58,7 +58,7 @@ spec:
     protocol: TCP
     name: mysql-port
   selector:
-    app: {{ .Release.Name }}-mysql
+    app: {{ .Values.service.mysqltag | default (printf "%s-mysql" .Release.Name) }}
   type: ClusterIP
 {{- if .Values.netpol.enabled }}  
 ---
@@ -69,12 +69,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-mysql
+      app: {{ .Values.service.mysqltag | default (printf "%s-mysql" .Release.Name) }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-server
+          app: {{ .Values.service.servertag | default (printf "%s-server" .Release.Name) }}
     ports:
     - port: 3306
       protocol: TCP

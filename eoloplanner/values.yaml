@@ -4,3 +4,18 @@ ingress:
   overridenpath: ""
 netpol:
   enabled: true
+service:
+  mongoimage: "mongo:4.2.12-bionic"
+  mongotag: ""
+  mysqlimage: "mysql:8.0.22"
+  mysqltag: ""
+  plannerimage: "franrobles8/planner:v3.0"
+  plannertag: ""
+  rabbitimage: "rabbitmq:3-management"
+  rabbittag: ""
+  serverimage: "oscarsotosanchez/server:v1.0"
+  servertag: ""
+  topoimage: "oscarsotosanchez/toposervice:v1.0"
+  topotag: ""
+  weatherimage: "oscarsotosanchez/weatherservice:v1.0"
+  weathertag: ""

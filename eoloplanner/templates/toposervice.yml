@@ -7,12 +7,12 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-toposervice
+      app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-toposervice
+        app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
         {{ .Release.Name }}-dns-policy: enabled
     spec:
       securityContext:
@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
       - name: {{ .Release.Name }}-toposervice
-        image: oscarsotosanchez/toposervice:v1.0
+        image: {{ .Values.service.topoimage }}
         env:
         - name: SPRING_DATA_MONGODB_HOST
           value: {{ .Release.Name }}-mongodb-service
@@ -42,7 +42,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-toposervice-service
   labels:
-    app: {{ .Release.Name }}-toposervice
+    app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
 spec:
   ports:
   - port: 8080
@@ -50,7 +50,7 @@ spec:
     protocol: TCP
     name: toposervice-port
   selector:
-    app: {{ .Release.Name }}-toposervice
+    app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
   {{- if .Values.ingress.enabled }}
   type: ClusterIP
   {{- else }}
@@ -65,12 +65,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-toposervice
+      app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
   egress:
   - to:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-mongodb
+          app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
     ports:
     - port: 27017
       protocol: TCP
@@ -83,12 +83,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-toposervice
+      app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-planner
+          app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
     - namespaceSelector:
         matchLabels:
           kubernetes.io/metadata.name: kube-system
@@ -107,7 +107,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-toposervice
+      app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
   ingress:
     - ports:
       - port: 8080

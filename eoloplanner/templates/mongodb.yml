@@ -8,16 +8,16 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-mongodb
+      app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-mongodb
+        app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
     spec:
       containers:
       - name: {{ .Release.Name }}-mongodb
-        image: mongo:4.2.12-bionic
+        image: {{ .Values.service.mongoimage }}
         env:
         - name: MONGO_INITDB_DATABASE
           value: topoDB
@@ -54,7 +54,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-mongodb-service
   labels:
-    app: {{ .Release.Name }}-mongodb
+    app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
 spec:
   ports:
   - port: 27017
@@ -70,7 +70,7 @@ spec:
     protocol: TCP
     name: mongodb-port-27019
   selector:
-    app: {{ .Release.Name }}-mongodb
+    app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
   type: ClusterIP
 {{- if .Values.netpol.enabled }}
 ---
@@ -81,12 +81,12 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-mongodb
+      app: {{ .Values.service.mongotag | default (printf "%s-mongodb" .Release.Name) }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-toposervice
+          app: {{ .Values.service.topotag | default (printf "%s-toposervice" .Release.Name) }}
     ports:
     - port: 27017
       protocol: TCP

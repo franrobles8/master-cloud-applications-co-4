@@ -8,16 +8,16 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app: {{ .Release.Name }}-rabbitmq
+      app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
   replicas: 1
   template:
     metadata:
       labels:
-        app: {{ .Release.Name }}-rabbitmq
+        app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
     spec:
       containers:
       - name: {{ .Release.Name }}-rabbitmq
-        image: rabbitmq:3-management
+        image: {{ .Values.service.rabbitimage }}
         env:
         - name: RABBITMQ_DEFAULT_USER
           value: root
@@ -51,7 +51,7 @@ kind: Service
 metadata:
   name: {{ .Release.Name }}-rabbitmq-service
   labels:
-    app: {{ .Release.Name }}-rabbitmq
+    app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
 spec:
   ports:
   - port: 5672
@@ -63,7 +63,7 @@ spec:
     protocol: TCP
     name: rabbitmq-port-15672
   selector:
-    app: {{ .Release.Name }}-rabbitmq
+    app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
   type: ClusterIP
 {{- if .Values.netpol.enabled }}
 ---
@@ -74,15 +74,15 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: {{ .Release.Name }}-rabbitmq
+      app: {{ .Values.service.rabbittag | default (printf "%s-rabbitmq" .Release.Name) }}
   ingress:
   - from:
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-planner
+          app: {{ .Values.service.plannertag | default (printf "%s-planner" .Release.Name) }}
     - podSelector:
         matchLabels:
-          app: {{ .Release.Name }}-server
+          app: {{ .Values.service.servertag | default (printf "%s-server" .Release.Name) }}
     ports:
     - port: 5672
       protocol: TCP

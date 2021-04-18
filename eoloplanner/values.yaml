@@ -2,3 +2,5 @@ ingress:
   enabled: false
   type: "NodePort"
   overridenpath: ""
+netpol:
+  enabled: true

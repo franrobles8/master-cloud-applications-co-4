@@ -33,7 +33,10 @@ spec:
         - name: SPRING_DATA_MONGODB_USERNAME
           value: root
         - name: SPRING_DATA_MONGODB_PASSWORD
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mongodb-secret
+              key: password
         ports:
         - containerPort: 8080
 ---

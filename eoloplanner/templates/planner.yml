@@ -36,7 +36,10 @@ spec:
         - name: SPRING_RABBITMQ_USERNAME
           value: root
         - name: SPRING_RABBITMQ_PASSWORD
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-rabbitmq-secret
+              key: password
 {{- if .Values.netpol.enabled }}
 ---
 apiVersion: networking.k8s.io/v1

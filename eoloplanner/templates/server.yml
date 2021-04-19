@@ -34,9 +34,15 @@ spec:
         - name: MYSQL_USER
           value: root
         - name: MYSQL_PASS
-          value: password
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-mysql-secret
+              key: password
         - name: RABBITMQ_URL
-          value: amqp://root:password@{{ .Release.Name }}-rabbitmq-service
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-rabbitmq-secret
+              key: url
         ports:
         - containerPort: 3000
 ---

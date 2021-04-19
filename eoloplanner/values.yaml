@@ -25,9 +25,12 @@ persistentVolumes:
 
 mongodb:
   storageClassName: ""
+  password: ""
 
 mysql:
   storageClassName: ""
+  password: ""
 
 rabbitmq:
   storageClassName: ""
+  password: ""

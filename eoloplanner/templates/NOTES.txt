@@ -1,2 +1,36 @@
-1. Get the application URL by running these commands:
+Eoloplanner notes:
+{{- if .Values.ingress.enabled }}
+To access the app, configure your file /etc/hosts to add the ingress domain:
 
+Add the ingress domain to your hosts file by executing:
+
+{{- if .Values.ingress.overridenPath }}
+    echo "`minikube ip` {{ .Values.ingress.overridenPath }}" >> /etc/hosts
+
+Access in a web browser in http://{{ .Values.ingress.overridenPath }} and try to create an eoloplant.
+
+You should also be able to access the toposervice REST API in http://{{ .Values.ingress.overridenPath }}/toposervice/api/topographicdetails/jaca
+{{- else }}
+    echo "`minikube ip` {{ .Release.Name }}-cluster-ip" >> /etc/hosts
+
+Access in a web browser in http://{{ .Release.Name }}-cluster-ip and try to create an eoloplant.
+
+You should also be able to access the toposervice REST API in http://{{ .Release.Name }}-cluster-ip/toposervice/api/topographicdetails/jaca
+
+{{- end }}
+
+{{ else }}
+
+Access the server webapp by executing the command and try creating a new eoloplant:
+
+    minikube service {{ .Release.Name }}-server-service
+
+Test the toposervice REST API by executing the following command in the browsers:
+
+    minikube service {{ .Release.Name }}-toposervice-service
+
+Once the browser is open, add the following path to the url:
+
+    <URL>/api/topographicdetails/jaca
+
+{{- end }}

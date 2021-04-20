@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  eoloplanner-mca:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-04-20T22:00:26.205437937+02:00"
+    description: A Helm chart for Kubernetes
+    digest: 542fd531f1dcb7aba84ab3a22a2195208318c3b8e4f583b795d918ca0f770dc7
+    name: eoloplanner-mca
+    type: application
+    urls:
+    - eoloplanner-mca-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-04-20T22:00:26.204231086+02:00"
